@@ -1,0 +1,42 @@
+server:
+  port: 8081
+liquibase:
+  url: jdbc:postgresql://localhost:5432/public
+spring:
+  liquibase:
+    url: jdbc:postgresql://localhost:5432/public
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+
+
+multitenancy:
+  datasource-cache:
+    maximumSize: 100
+    expireAfterAccess: 1
+  master:
+    datasource:
+      url: jdbc:postgresql://localhost:5432/public
+      username: postgres
+      password: admin
+    liquibase:
+      changeLog: classpath:db/changelog/db.changelog-master.yaml
+  tenant:
+    datasource:
+      url-prefix: jdbc:postgresql://localhost:5432/
+      hikari:
+        maximumPoolSize: 2
+        minimumIdle: 0
+        idleTimeout: 30000
+    liquibase:
+      changeLog: classpath:db/changelog/db.changelog-tenant.yaml
+
+
+
+encryption:
+  secret: test
+  salt: test
